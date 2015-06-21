@@ -1,10 +1,13 @@
 package pages;
 
+import javax.xml.xpath.XPath;
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.FindBys;
 
 public class HomePage {
-    private static final String BODY = "some text";
+    private static final String BODY = "aaa";
     
     @FindBy(xpath = "//div[@style='-moz-user-select: none;']//div[@role='button']")
     public WebElement buttonWrite;
@@ -42,13 +45,34 @@ public class HomePage {
     @FindBy(xpath = "//a[contains(@href,'spam')]")
     public WebElement spam;
     
-    @FindBy(xpath = "//td[contains(@style,'cursor')]/div[@role='checkbox']")
+    @FindBy(xpath = "//span[contains(.,'"+ BODY +"')]")
     public WebElement linkBodyForVerification;
     
-    @FindBy(xpath = "//div/div[@act='18']")
+    @FindBy(xpath = "//div[@gh='mtb']//div[@act='18']")
     public WebElement buttonNotSpam;
     
     @FindBy(xpath = "//tr[@tabindex='-1']/td[2]/div[1]")
     public WebElement checkbox;
+    
+    @FindBy(name = "Андрей Чорняк")
+    public WebElement name;
+    
+    @FindBy(xpath = "//div[@gh='tm']//span[@role='checkbox']")
+    public WebElement selectAllCheckbox;
+    
+    @FindBy(xpath = "//div[@act='10']")
+    public WebElement buttonDelete;
+    
+    @FindBy(xpath = "//title[contains(.,'Важные')]/../..//div[@data-tooltip='Удалить']")
+    public WebElement buttonDeleteStarred;
+    
+    @FindBy(xpath = "//span[@aria-label='Не помечено']")
+    public WebElement star;
+    
+    @FindBy(xpath = "//a[contains(@href,'#imp')]")
+    public WebElement important;
+    
+    @FindBy(xpath = "//title[contains(.,'Важные')]/../..//span[contains(.,'aaa')]")
+    public WebElement staredVerification;
 
 }

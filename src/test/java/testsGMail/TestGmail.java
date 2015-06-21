@@ -32,7 +32,8 @@ public class TestGmail {
     private static final String USER2 = "andrii.chorniak2@gmail.com";
     private static final String PASSWORD1 = "123456am";
     private static final String PASSWORD2 = "1234567am";
-    private static final String BODY = "some text";
+    private static final String BODY = "aaa";
+    private static final String BODY2 = "bbb";
     private WebDriver driver;
     private WebDriverFactory webDriverFactory = new WebDriverFactory();
     private WebDriverWait wait;
@@ -55,11 +56,11 @@ public class TestGmail {
         home = PageFactory.initElements(driver, HomePage.class);
     }
 
-//    @AfterClass
-//    public void afterClass() {
-//        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-//        driver.quit();
-//    }
+    @AfterClass
+    public void afterClass() {
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.quit();
+    }
 
     @BeforeMethod
     public void beforeMethod() {
@@ -68,13 +69,14 @@ public class TestGmail {
 
     @AfterMethod
     public void afterMethod() {
-
+        doLogout();
     }
 
+    
     @Test(description = "The letter from user1 in Spam")
     public void testSpam() {
         doLogin(USER1, PASSWORD1);
-        sendMessage();
+        sendMessage(BODY);
         doLogout();
         login.linkEnterAnotherAcount.click();
         login.linkAddAcount.click();
@@ -82,25 +84,56 @@ public class TestGmail {
         markLetterAsSpam();
         doLogout();
         login.linkAddAcount.click();
-        //login.linkEnterAnotherAcount.click();
         doLogin(USER1, PASSWORD1);
-        sendMessage();
+        sendMessage(BODY2);
         doLogout();
-       // login.linkEnterAnotherAcount.click();
         login.linkAddAcount.click();
         doLogin(USER2, PASSWORD2);
         goToFolderSpam();
-      //  wait.until(ExpectedConditions.visibilityOf(home.linkBodyForVerification));
-      //  assertEquals(home.linkBodyForVerification.getText(),"Андрей Чорняк");
+        assertEquals(home.linkBodyForVerification.getText(), " - " + BODY);
         removeFromSpam();
-        doLogout();
+        removeFromInbox();
 
+    }
+    
+    @Test(description = "The letter from user1 in starred")
+    public void testStarred(){
+        doLogin(USER1, PASSWORD1);
+        sendMessage(BODY);
+        doLogout();
+        login.linkEnterAnotherAcount.click();
+        login.linkAddAcount.click();
+        doLogin(USER2, PASSWORD2);
+        doStarred();
+        home.staredVerification.getText();
+        removeFromImportant();
+       
+    }
+
+    private void removeFromImportant() {
+        wait.until(ExpectedConditions.visibilityOf(home.selectAllCheckbox)).click();
+        wait.until(ExpectedConditions.visibilityOf(home.buttonDeleteStarred)).click();
+        
+    }
+
+    private void doStarred() {
+        home.star.click();
+        home.linkMore.click();
+        home.important.click();
+        
+    }
+
+    private void removeFromInbox() {
+        home.inbox.click();
+        wait.until(ExpectedConditions.visibilityOf(home.selectAllCheckbox)).click();
+        wait.until(ExpectedConditions.visibilityOf(home.buttonDelete)).click();
+        
     }
 
     private void removeFromSpam() {
-       wait.until(ExpectedConditions.visibilityOf(home.linkBodyForVerification)).click();
-       wait.until(ExpectedConditions.visibilityOf(home.buttonNotSpam)).click();
-        
+        wait.until(ExpectedConditions.visibilityOf(home.linkBodyForVerification)).click();
+        wait.until(ExpectedConditions.visibilityOf(home.buttonNotSpam)).click();
+
     }
 
     private void goToFolderSpam() {
@@ -110,22 +143,19 @@ public class TestGmail {
 
     private void markLetterAsSpam() {
         home.inbox.click();
-        //wait.until(ExpectedConditions.visibilityOf(home.linkLetter)).click();
-       home.checkbox.click();
+        home.checkbox.click();
         wait.until(ExpectedConditions.visibilityOf(home.buttonSpam));
         home.buttonSpam.click();
-        
 
     }
 
-    private void sendMessage() {
+    private void sendMessage(String body) {
         home.buttonWrite.click();
-       // wait.until(ExpectedConditions.visibilityOf(home.form));
         home.addressee.clear();
         wait.until(ExpectedConditions.visibilityOf(home.addressee));
         home.addressee.sendKeys(USER2);
         home.body.clear();
-        home.body.sendKeys(BODY);
+        home.body.sendKeys(body);
         home.buttonSend.click();
 
     }
@@ -141,6 +171,7 @@ public class TestGmail {
         login.email.clear();
         login.email.sendKeys(user);
         wait.until(ExpectedConditions.visibilityOf(login.next)).click();
+        wait.until(ExpectedConditions.visibilityOf(login.password));
         login.password.clear();
         login.password.sendKeys(password);
         wait.until(ExpectedConditions.visibilityOf(login.signIn)).click();
