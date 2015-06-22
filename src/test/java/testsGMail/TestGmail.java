@@ -34,6 +34,7 @@ public class TestGmail {
     private static final String PASSWORD2 = "1234567am";
     private static final String BODY = "aaa";
     private static final String BODY2 = "bbb";
+    private static final String MESSAGE = "Настройки сохранены.";
     private WebDriver driver;
     private WebDriverFactory webDriverFactory = new WebDriverFactory();
     private WebDriverWait wait;
@@ -66,10 +67,11 @@ public class TestGmail {
     public void beforeMethod() {
 
     }
-
+    
     @AfterMethod
     public void afterMethod() {
-        doLogout();
+        
+
     }
 
     
@@ -93,7 +95,8 @@ public class TestGmail {
         assertEquals(home.linkBodyForVerification.getText(), " - " + BODY);
         removeFromSpam();
         removeFromInbox();
-
+        doLogout();
+        login.linkAddAcount.click();
     }
     
     @Test(description = "The letter from user1 in starred")
@@ -101,13 +104,33 @@ public class TestGmail {
         doLogin(USER1, PASSWORD1);
         sendMessage(BODY);
         doLogout();
-        login.linkEnterAnotherAcount.click();
         login.linkAddAcount.click();
         doLogin(USER2, PASSWORD2);
         doStarred();
         home.staredVerification.getText();
         removeFromImportant();
-       
+        doLogout();
+        login.linkAddAcount.click();
+    }
+    
+    @Test(description = "Check that tema has changed")
+    public void testTema(){
+        doLogin(USER1, PASSWORD1);
+        setTema();
+        wait.until(ExpectedConditions.visibilityOf(home.message));
+        assertEquals(home.message.getText(), MESSAGE);
+        doLogout();
+        
+    }
+
+    private void setTema() {
+        wait.until(ExpectedConditions.visibilityOf(home.settings));
+        home.settings.click();
+        wait.until(ExpectedConditions.visibilityOf(home.tema));
+        home.tema.click();
+        wait.until(ExpectedConditions.visibilityOf(home.blueTema));
+        home.blueTema.click();
+        
     }
 
     private void removeFromImportant() {
@@ -162,7 +185,7 @@ public class TestGmail {
 
     private void doLogout() {
         home.emailBeforeExit.click();
-        wait.until(ExpectedConditions.visibilityOf(home.buttonLogout)).click();
+        home.buttonLogout.click();
 
     }
 

@@ -2,6 +2,7 @@ package pages;
 
 import javax.xml.xpath.XPath;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
@@ -74,5 +75,17 @@ public class HomePage {
     
     @FindBy(xpath = "//title[contains(.,'Важные')]/../..//span[contains(.,'aaa')]")
     public WebElement staredVerification;
+    
+    @FindBy(xpath = "//div[@gh='s']/div[@tabindex='0']")
+    public WebElement settings;
+    
+    @FindBy(xpath = "//div[@role='menuitem']/div[contains(.,'Темы')]")
+    public WebElement tema;
+    
+    @FindBy(xpath = "//div/img[contains(@src,'newblue')]")
+    public WebElement blueTema;
+    
+    @FindBy(xpath = "//div[contains(text(),'Настройки сохранены.')]")
+    public WebElement message;
 
 }
