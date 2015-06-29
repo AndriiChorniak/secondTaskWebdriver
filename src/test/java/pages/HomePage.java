@@ -9,8 +9,9 @@ import org.openqa.selenium.support.FindBys;
 
 public class HomePage {
     private static final String BODY = "aaa";
+    private static final String FILE_NAME = "SpaghettiTests2Task.xlsx";
     
-    @FindBy(xpath = "//div[@style='-moz-user-select: none;']//div[@role='button']")
+    @FindBy(xpath = "//div[contains(text(),'НАПИСАТЬ')]")
     public WebElement buttonWrite;
     
     @FindBy(xpath = "//form[@enctype='multipart/form-data']")
@@ -64,17 +65,17 @@ public class HomePage {
     @FindBy(xpath = "//div[@act='10']")
     public WebElement buttonDelete;
     
-    @FindBy(xpath = "//title[contains(.,'Важные')]/../..//div[@data-tooltip='Удалить']")
+    @FindBy(xpath = "//div[@data-tooltip='Удалить']")
     public WebElement buttonDeleteStarred;
     
     @FindBy(xpath = "//span[@aria-label='Не помечено']")
     public WebElement star;
     
-    @FindBy(xpath = "//a[contains(@href,'#imp')]")
-    public WebElement important;
+    @FindBy(xpath = "//a[contains(@href,'#starred')]")
+    public WebElement starred;
     
-    @FindBy(xpath = "//title[contains(.,'Важные')]/../..//span[contains(.,'aaa')]")
-    public WebElement staredVerification;
+    @FindBy(xpath = "//div/span[contains(text(),'"+BODY+"')]")
+    public WebElement starredVerification;
     
     @FindBy(xpath = "//div[@gh='s']/div[@tabindex='0']")
     public WebElement settings;
@@ -87,5 +88,18 @@ public class HomePage {
     
     @FindBy(xpath = "//div[contains(text(),'Настройки сохранены.')]")
     public WebElement message;
+    
+    @FindBy(xpath = "//div[@command='Files']")
+    public WebElement attachFile;
+    
+    @FindBy(xpath = "//div[contains(@aria-label,'Прикрепленный файл')]")
+    public WebElement attachedFileName;
+    
+    @FindBy(xpath = "//div[contains(text(),'"+BODY+"')]")
+    public WebElement verifiedTextOfMessage;
+    
+    @FindBy(xpath = "//div/span[contains(text(),'"+FILE_NAME+"')]")
+    public WebElement verifiedFile;
+    
 
 }
